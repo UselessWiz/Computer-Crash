@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace pm_march_jamgame;
 
@@ -13,6 +13,8 @@ public class TextSystem
     private TextObject[][] lines;
     private float newCharTimer = 0f;
     private int updatingLine = 0;
+
+    public SoundEffect textBeep;
 
     public bool dialogueFinished = false;
 
@@ -51,6 +53,7 @@ public class TextSystem
                 }
                 
                 lines[currentDialogue][i].characters.Add(newCharacter);
+                if (textBeep != null) textBeep.CreateInstance().Play();
             }
 
             // If at the end of the line, start updating the next one.

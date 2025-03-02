@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Diagnostics;
 
@@ -23,6 +24,7 @@ public class Game1 : Game
     private Sprite Word;
     private Sprite Bluescreen;
     private Sprite DialogBox;
+    private Sprite Desktop;
 
     private SpriteFont Arial;
 
@@ -64,6 +66,8 @@ public class Game1 : Game
         Word = new Sprite("Sprites/Word95", spriteBatch, Content);
         WordController wordController = new WordController(Word);
         wordController.monogram = Content.Load<SpriteFont>("Monogram");
+        wordController.thoughtBeep = Content.Load<SoundEffect>("Audio/Thought-Beep");
+        wordController.bluescreenCrash = Content.Load<SoundEffect>("Audio/BlueScreen-Crash");
         wordController.Initialize();
         wordController.game = this;
         Word.AttachComponent(wordController);
@@ -75,7 +79,18 @@ public class Game1 : Game
         Bluescreen.AttachComponent(bluescreenController);
 
         DialogBox = new Sprite("Sprites/DialogBox", spriteBatch, Content);
-        //DialogBoxController dialogBoxController = new DialogBoxController(DialogBox);
+        DialogBox.Position = new Vector2(320 - DialogBox.Texture.Width / 2, 240 - DialogBox.Texture.Height /2);
+        DialogBoxController dialogBoxController = new DialogBoxController(DialogBox);
+        dialogBoxController.arial = Content.Load<SpriteFont>("W95");
+        dialogBoxController.Button = new Sprite("Sprites/OK", spriteBatch, Content, new Vector2(DialogBox.Position.X + (DialogBox.Texture.Width - 30) / 2, 270));
+        dialogBoxController.buttonHitbox = new Rectangle((int)dialogBoxController.Button.Position.X, (int)dialogBoxController.Button.Position.Y, 
+            dialogBoxController.Button.Texture.Width, dialogBoxController.Button.Texture.Height);
+        dialogBoxController.ok = Content.Load<Texture2D>("Sprites/OK-Hover");
+        dialogBoxController.okHover = dialogBoxController.Button.Texture;
+        dialogBoxController.game = this;
+        DialogBox.AttachComponent(dialogBoxController);
+
+        Desktop = new Sprite("Sprites/Desktop", spriteBatch, Content);
 
         base.Initialize();
     }
@@ -83,7 +98,7 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         // TODO: use this.Content to load your game content here
-        Arial = Content.Load<SpriteFont>("Arial");
+        Arial = Content.Load<SpriteFont>("W95-Small");
     }
 
     protected override void Update(GameTime gameTime)
@@ -107,14 +122,17 @@ public class Game1 : Game
 
             case GameState.DIALOGBOXFIXED:
                 // Display dialogue box with message along the lines of "config changed, restarting to confirm changes"
+                DialogBox.Update(gameTime);
                 break;
 
             case GameState.DIALOGBOXINVALID:
                 // Display dialog box with message along the lines of "invalid configuration, nothing has changed".
+                DialogBox.Update(gameTime);
                 break;
 
             case GameState.FIXED:
                 // boot to desktop with window saying thanks for playing.
+                DialogBox.Update(gameTime);
                 break;
         }
 
@@ -145,17 +163,39 @@ public class Game1 : Game
                 Bluescreen.GetComponent<BluescreenController>().DrawText(spriteBatch);
                 break;
 
-            case GameState.DIALOGBOXFIXED:
+            case >= (GameState)3:
                 // Display dialogue box with message along the lines of "config changed, restarting to confirm changes"
+                Desktop.Draw();
+                spriteBatch.DrawString(Arial, DateTime.Now.TimeOfDay.ToString().Split(".")[0], new Vector2(580, 458), Color.Black);
+                if (gameTime.TotalGameTime.TotalSeconds > 2)
+                {
+                    DialogBox.Draw();
+                    DialogBoxController controller = DialogBox.GetComponent<DialogBoxController>();
+                    spriteBatch.DrawString(controller.arial, TextObject.WrapText(controller.textOptions[(int)GameState - 3], 40), new Vector2(200, 205), Color.Black);
+                    controller.ButtonDraw();
+                }
                 break;
-
+/*
             case GameState.DIALOGBOXINVALID:
                 // Display dialog box with message along the lines of "invalid configuration, nothing has changed".
+                if (gameTime.TotalGameTime.TotalSeconds > 2)
+                {
+                    DialogBox.Draw();
+                    DialogBoxController controller = DialogBox.GetComponent<DialogBoxController>();
+                    spriteBatch.DrawString(controller.arial, controller.textOptions[(int)GameState - 3], new Vector2(150, 200), Color.Black);
+                }
                 break;
 
             case GameState.FIXED:
                 // boot to desktop with window saying thanks for playing.
+                if (gameTime.TotalGameTime.TotalSeconds > 2)
+                {
+                    DialogBox.Draw();
+                    DialogBoxController controller = DialogBox.GetComponent<DialogBoxController>();
+                    spriteBatch.DrawString(controller.arial, controller.textOptions[(int)GameState - 3], new Vector2(150, 200), Color.Black);
+                }
                 break;
+*/
         }
         spriteBatch.End();
 

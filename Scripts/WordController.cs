@@ -1,6 +1,7 @@
 using System;
 using Engine.Core;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -23,6 +24,8 @@ public class WordController : IComponent
     private Vector2 currentTextPosition;
 
     public SpriteFont monogram {get;set;}
+    public SoundEffect thoughtBeep;
+    public SoundEffect bluescreenCrash;
 
     public TextSystem textSystem;
     private Random random;
@@ -35,9 +38,10 @@ public class WordController : IComponent
 
     public void Initialize()
     {        
-        currentTextPosition = new Vector2(random.Next(20, 300), random.Next(290, 360));
+        currentTextPosition = new Vector2(random.Next(20, 240), random.Next(290, 360));
         textSystem = new TextSystem(TextObject.CreateLinesOfText(thoughtText[currentTextIndex], 35, 
-            currentTextPosition, 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff9911dd), [monogram]));
+            currentTextPosition, 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), [monogram]));
+        textSystem.textBeep = thoughtBeep;
     }
 
     public void PreUpdate(GameTime gameTime)
@@ -50,15 +54,17 @@ public class WordController : IComponent
 
         if (textSystem.dialogueFinished && currentTextIndex < thoughtText.Length - 1) {
             currentTextIndex += 1;
-            currentTextPosition = new Vector2(random.Next(0, 300), random.Next(290, 360));
+            currentTextPosition = new Vector2(random.Next(20, 240), random.Next(290, 360));
             textSystem = new TextSystem(TextObject.CreateLinesOfText(thoughtText[currentTextIndex], 35, 
-                currentTextPosition, 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff9911dd), new SpriteFont[] {monogram}));
+                currentTextPosition, 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+            textSystem.textBeep = thoughtBeep;
         }
 
         if (KeyboardExtended.KeyPressed(Keys.LeftControl) || KeyboardExtended.KeyPressed(Keys.RightControl))
         {
+            bluescreenCrash.CreateInstance().Play();
             game.GameState = GameState.BLUESCREEN;
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(600);
         }
     }
 

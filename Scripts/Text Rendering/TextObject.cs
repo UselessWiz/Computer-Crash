@@ -117,7 +117,7 @@ public class TextObject
     }
 
     // Used by the above functions to wrap the text.
-    private static string WrapText(string text, int maxLength)
+    public static string WrapText(string text, int maxLength)
 	{
 		int lastWrapIndex = 0;
 

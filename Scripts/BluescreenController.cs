@@ -63,6 +63,6 @@ public class BluescreenController : IComponent
         if ((int)percentage < 100) percentString = "0" + percentString;
         if ((int)percentage < 10)  percentString = "0" + percentString;
 
-        spriteBatch.DrawString(monogram, percentString, new Vector2(70, 304), Color.White);
+        spriteBatch.DrawString(monogram, percentString, new Vector2(70, 305), Color.White);
     }
 }
