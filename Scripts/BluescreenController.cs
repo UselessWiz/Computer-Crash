@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace pm_march_jamgame;
 
@@ -39,7 +40,12 @@ public class BluescreenController : IComponent
             if (Keyboard.GetState().GetPressedKeyCount() > 0)
             {
                 if (game.SaveData.GameBootCount >= 2) {
-                    if (OperatingSystem.IsWindows()) System.Diagnostics.Process.Start(System.IO.Directory.GetCurrentDirectory());
+                    if (OperatingSystem.IsWindows()) {
+                        ProcessStartInfo startInfo = new ProcessStartInfo(System.IO.Directory.GetCurrentDirectory() + "\\ROOT");
+                        startInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();
+                        startInfo.UseShellExecute = true;
+                        Process.Start(startInfo);
+                    }
                 }
 
                 game.StartCrash();

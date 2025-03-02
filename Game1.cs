@@ -207,7 +207,10 @@ public class Game1 : Game
 
         Console.WriteLine(SaveData.GameBootCount);
         Process process = System.Diagnostics.Process.GetCurrentProcess();
-        Process.Start(process.MainModule.FileName);
+        ProcessStartInfo startInfo = new ProcessStartInfo(process.MainModule.FileName);
+        startInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();
+        startInfo.UseShellExecute = true;
+        Process.Start(startInfo);
 
         Environment.Exit(0);
     }
