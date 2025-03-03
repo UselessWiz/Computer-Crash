@@ -6,7 +6,7 @@ Version: 9.5.0
 Changes:
     - [MAJOR CHANGE] We have restructured the ROOT\SYS folder, adding further organizational subdirectories to begin controlling the mess of system files previously contained within the ROOT\SYS directory. Note that some systems may have issues following through with this change, with the most common symptom; if this is the case for your system, try your best to assemble the ROOT\SYS folder correctly on your own (there will be no fix for the next few days as our team has taken the weekend off). [Bob - Intern]
 
-    - Added support for a number of new, rarely used languages, including Esperanto, Xhosa, Basque and Serbian. [James - Locale Team]
+    - Added support for a number of new, rarely used languages, including Esperanto, Xhosa, Igbo and Serbian. [James - Locale Team]
 
 Date: 30/02/2025
 Version: 9.4.1
