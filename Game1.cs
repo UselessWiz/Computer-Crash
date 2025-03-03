@@ -40,6 +40,8 @@ public class Game1 : Game
         // Adds an artificial pause so what happened can be processed.
         System.Threading.Thread.Sleep(2000);
 
+        Console.WriteLine(FileSystemUtils.GenerateState("ROOT"));
+
         // TODO: Add your initialization logic here
         graphics.IsFullScreen = true;
         graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
@@ -58,7 +60,7 @@ public class Game1 : Game
         GameStateCheck();
 
         // DEBUG - MANUAL STATE SET - NOTE: IT IS VERY DANGEROUS TO SET THIS TO BLUESCREEN, AS IT MAY NOT EXIT FROM BLUESCREEN STATE.
-        GameState = GameState.GAMEPLAY;
+        //GameState = GameState.GAMEPLAY;
 
         // Initialize objects
         spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -212,6 +214,8 @@ public class Game1 : Game
     // Put the game in the correct state upon startup.
     private void GameStateCheck()
     {
+        Console.WriteLine(FileSystemUtils.InitialState);
+
         FileSystemState fileSystemState = FileSystemUtils.CheckFileSystem();
         SaveData = new SaveData();
 
@@ -243,6 +247,7 @@ public class Game1 : Game
     public void StartCrash()
     {
         SaveData.GameBootCount += 1;
+        SaveData.LastGameState = (int)GameState;
         SaveData.WriteSaveData();
 
         Console.WriteLine(SaveData.GameBootCount);

@@ -39,7 +39,7 @@ public class BluescreenController : IComponent
 
             if (Keyboard.GetState().GetPressedKeyCount() > 0)
             {
-                if (game.SaveData.GameBootCount >= 2) {
+                if (game.SaveData.GameBootCount >= 1) {
                     if (OperatingSystem.IsWindows()) {
                         ProcessStartInfo startInfo = new ProcessStartInfo(System.IO.Directory.GetCurrentDirectory() + "\\ROOT");
                         startInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();

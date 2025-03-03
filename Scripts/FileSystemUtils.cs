@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 public enum FileSystemState
@@ -31,24 +32,27 @@ ROOT\SYS\LANG\jp.lp
 ROOT\SYS\NET\HOSTS.CONF
 ROOT\SYS\NET\NETMAN.EXE
 ROOT\SYS\SEC\SECMAN.EXE
-ROOT\SYS\SEC\SECUI.DLL";
+ROOT\SYS\SEC\SECUI.DLL
+";
 
     // THIS MUST BE CHANGED BEFORE USING - HARD CODE.
-    string InitialState = 
+    public string InitialState = 
     @"ROOT\Changelog.txt
 ROOT\SYS
 ROOT\SYS\DOORADVDISP.DRI
-ROOT\SYS\DOORBASICDISP.DRI
-ROOT\SYS\DOORKB.DRI
-ROOT\SYS\DOORMSE.DRI
-ROOT\SYS\en.lp
+ROOT\SYS\DRI
 ROOT\SYS\HOSTS.CONF
 ROOT\SYS\ig.lp
 ROOT\SYS\it.lp
 ROOT\SYS\jp.lp
+ROOT\SYS\LANG
 ROOT\SYS\NETMAN.EXE
 ROOT\SYS\SECMAN.EXE
-ROOT\SYS\SECUI.DLL";
+ROOT\SYS\SECUI.DLL
+ROOT\SYS\DRI\DOORBASICDISP.DRI
+ROOT\SYS\DRI\DOORKB.DRI
+ROOT\SYS\DRI\DOORMSE.DRI
+ROOT\SYS\LANG\en.lp";
 
     string TestState = "";
 
@@ -59,24 +63,22 @@ ROOT\SYS\SECUI.DLL";
 
     public FileSystemState CheckFileSystem()
     {
+        Console.WriteLine("this got called");
+        bool notCorrect = false;
+        bool notInitial = false;
+
         foreach (string entry in FileSystemEntries)
         {
             if (entry.ToUpper().Contains(".LOG")) continue;
-            TestState += entry + "\n";
+            if (!CorrectState.Contains(entry)) notCorrect = true;
+            if (!InitialState.Contains(entry)) notInitial = true;
         }
 
-        if (TestState == CorrectState)
-        {
-            return FileSystemState.CORRECT;
-        }
-        else if (TestState == InitialState) 
-        {
-            return FileSystemState.INITIAL;
-        }
-        else
-        {
-            return FileSystemState.OTHER;
-        }
+        if (notCorrect && notInitial) return FileSystemState.OTHER;
+        if (notCorrect) return FileSystemState.INITIAL;
+        if (notInitial) return FileSystemState.CORRECT;
+
+        return FileSystemState.OTHER;
     }
 
     public static string GenerateState(string root)
