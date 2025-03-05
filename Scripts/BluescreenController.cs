@@ -32,6 +32,22 @@ public class BluescreenController : IComponent
     public void Update(GameTime gameTime)
     {
         percentage += new Random().Next(0, 20) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (percentage == 99)
+        {
+            System.Threading.Thread.Sleep(2000);
+            percentage++;
+        }
+
+        if (percentage == 44)
+        {
+            percentage = 47;
+        }
+
+        if (percentage < 80 && percentage >= 72)
+        {
+            percentage += new Random().Next(20, 30) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
         
         if (percentage >= 100)
         {
