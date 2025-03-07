@@ -2,33 +2,40 @@ Doors OS Changelog
 ------------------
 
 Date: 07/03/2025
-Version: 9.5.0
+Version: 0.2.0
 Changes:
     - [MAJOR CHANGE] We have restructured the ROOT\SYS folder, adding further organizational subdirectories to begin controlling the mess of system files previously contained within the ROOT\SYS directory. Note that some systems may have issues following through with this change, with the most common symptom; if this is the case for your system, try your best to assemble the ROOT\SYS folder correctly on your own (there will be no fix for the next few days as our team has taken the weekend off). [Bob - Intern]
 
     - Added support for a number of new, rarely used languages, including Esperanto, Xhosa, Igbo and Serbian. [James - Locale Team]
 
 Date: 30/02/2025
-Version: 9.4.1
+Version: 0.1.4
 Changes:
     - Fixed an issue with months not ticking over correctly in specific edgecases (i.e. February). Some systems still haven't been updated. [Bob - Intern]
 
-Date:
-Version: 9.4.0
+Date: 28/02/2025
+Version: 0.1.3
 Changes:
-    -
+    - Added a few additional applications to the OS that we've been working on for a while, such as Proword, Propoint and Prosheets. [Lisa - Soft Eng.]
+    - Reverted the addition of IR file transfers. Not only is the technology obsolete, the implementation created system stability problems. [Alice - Soft Eng.]
 
-Date:
-Version 9.3.3
+Date: 22/02/2024
+Version: 0.1.2
+Changes:
+    - Developed an additional Display driver to accommodate users with larger displays better. Note: This driver, while stable, is still in beta. [Marius - Soft Eng.]
+    - Added support for IR file transfers. [Bob - Intern]
 
-Date:
-Version: 9.2.1
+Date: 13/02/2024
+Version: 0.1.1
+Changes:
+    - Created a number of small tools the OS can use to more effectively manage it's resources. [Lisa - Soft Eng.]
+    - Added support for a number of new, commonly used languages, including Japanese and Italian. [James - Locale Team]
 
-Date:
-Version: 9.1.2
+    - Since our last update, we've also hired a bunch of new staff to aid in building the OS. In particular, welcome Bob the Intern to the team :).
+    If you'd like the chance to work with us on the OS, contact us at https://www.doors.com/pages/contact
 
-Date:
-Version: 9.0.4
+Date: 03/02/2024
+Version: 0.1.0
+Changes:
+    - [MAJOR UPDATE] This marks the first stable release of the OS.
 
-
-For changes before version 9.0.0, or for a more detailed look at changes, please check https://doors.com/changelog.

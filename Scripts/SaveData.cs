@@ -9,7 +9,7 @@ public class SaveData
     public int GameBootCount;
     public int LastGameState;
 
-    public SaveData(string saveDataPath = "GameData/savedata.sav")
+    public SaveData(string saveDataPath = "GameData/SAVEDATA.SAV")
     {
         SaveDataPath = saveDataPath;
         if (File.Exists(saveDataPath)) { 

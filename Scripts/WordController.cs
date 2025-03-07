@@ -64,7 +64,7 @@ public class WordController : IComponent
         {
             bluescreenCrash.CreateInstance().Play();
             game.GameState = GameState.BLUESCREEN;
-            System.Threading.Thread.Sleep(600);
+            game.Bluescreen.GetComponent<BluescreenController>().startTime = gameTime.TotalGameTime.TotalSeconds;
         }
     }
 

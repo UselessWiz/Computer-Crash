@@ -5,13 +5,14 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace pm_march_jamgame;
 
 public class Game1 : Game
 {
     private GraphicsDeviceManager graphics;
-    private SpriteBatch spriteBatch;
+    public SpriteBatch spriteBatch;
 
     public RenderTarget2D mainRenderTarget;
     public Rectangle upscaledDrawTarget;
@@ -22,7 +23,7 @@ public class Game1 : Game
     public SaveData SaveData;
 
     private Sprite Word;
-    private Sprite Bluescreen;
+    public Sprite Bluescreen;
     private Sprite DialogBox;
     private Sprite Desktop;
 
@@ -38,7 +39,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // Adds an artificial pause so what happened can be processed.
-        System.Threading.Thread.Sleep(2000);
+        //System.Threading.Thread.Sleep(2000);
 
         Console.WriteLine(FileSystemUtils.GenerateState("ROOT"));
 
@@ -78,18 +79,21 @@ public class Game1 : Game
         BluescreenController bluescreenController = new BluescreenController(Bluescreen);
         bluescreenController.monogram = Content.Load<SpriteFont>("Monogram");
         bluescreenController.game = this;
+        bluescreenController.Initialize();
         Bluescreen.AttachComponent(bluescreenController);
 
         DialogBox = new Sprite("Sprites/DialogBox", spriteBatch, Content);
         DialogBox.Position = new Vector2(320 - DialogBox.Texture.Width / 2, 240 - DialogBox.Texture.Height /2);
         DialogBoxController dialogBoxController = new DialogBoxController(DialogBox);
         dialogBoxController.arial = Content.Load<SpriteFont>("W95");
+        dialogBoxController.monogram = Content.Load<SpriteFont>("Monogram");
         dialogBoxController.Button = new Sprite("Sprites/OK", spriteBatch, Content, new Vector2(DialogBox.Position.X + (DialogBox.Texture.Width - 30) / 2, 270));
         dialogBoxController.buttonHitbox = new Rectangle((int)dialogBoxController.Button.Position.X, (int)dialogBoxController.Button.Position.Y, 
             dialogBoxController.Button.Texture.Width, dialogBoxController.Button.Texture.Height);
         dialogBoxController.ok = Content.Load<Texture2D>("Sprites/OK-Hover");
         dialogBoxController.okHover = dialogBoxController.Button.Texture;
         dialogBoxController.game = this;
+        dialogBoxController.Initialize();
         DialogBox.AttachComponent(dialogBoxController);
 
         Desktop = new Sprite("Sprites/Desktop", spriteBatch, Content);
@@ -105,7 +109,9 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (gameTime.TotalGameTime.TotalSeconds <= 2) return;
+
+        if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)))// && GameState != GameState.BLUESCREEN)
             Exit();
 
         KeyboardExtended.PreUpdate();
@@ -145,6 +151,8 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        if (gameTime.TotalGameTime.TotalSeconds <= 2) return;
+
         GraphicsDevice.SetRenderTarget(mainRenderTarget);
         GraphicsDevice.Clear(new Color(0xac0000));
 
@@ -161,7 +169,8 @@ public class Game1 : Game
                 break;
             
             case GameState.BLUESCREEN:
-                Bluescreen.Draw();
+                GraphicsDevice.Clear(Color.Black);
+                if (gameTime.TotalGameTime.TotalSeconds <= Bluescreen.GetComponent<BluescreenController>().startTime + 0.6) break;
                 Bluescreen.GetComponent<BluescreenController>().DrawText(spriteBatch);
                 break;
 
@@ -219,6 +228,9 @@ public class Game1 : Game
         FileSystemState fileSystemState = FileSystemUtils.CheckFileSystem();
         SaveData = new SaveData();
 
+        // If this is the first time running the game, create the SYSMAN shortcut.
+        if (SaveData.GameBootCount == 0) CreateShortcut();
+
         if (fileSystemState == FileSystemState.INITIAL)
         {
             // ORIGINAL FILE STATE
@@ -258,5 +270,24 @@ public class Game1 : Game
         Process.Start(startInfo);
 
         Environment.Exit(0);
+    }
+
+    public void CreateShortcut()
+    {
+        string text = ConvertToHex(@$"PATH={System.IO.Directory.GetCurrentDirectory()}\ROOT\SYS\SYSMAN\SYSMAN.exe
+DESC=Runs all System utilities upon startup (runs from STARTUP folder).");
+        File.WriteAllText(@$"{System.IO.Directory.GetCurrentDirectory()}\ROOT\SYS\SYSMANSTARTUP.LINK", "0x" + text);
+    }
+
+    // Thanks Nano HE (https://stackoverflow.com/questions/5664345/string-to-binary-in-c-sharp)
+    public static string ConvertToHex(string asciiString)
+    {
+        string hex = "";
+        foreach (char c in asciiString)
+        {
+            int tmp = c;
+            hex += String.Format("{0:x2}", (uint)System.Convert.ToUInt32(tmp.ToString()));
+        }
+        return hex;
     }
 }

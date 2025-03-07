@@ -2,6 +2,7 @@ using Engine.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace pm_march_jamgame;
 
@@ -10,6 +11,7 @@ public class DialogBoxController : IComponent
     public GameObject GameObject {get;init;}
 
     public SpriteFont arial;
+    public SpriteFont monogram;
     public Game1 game;
 
     public string[] textOptions = 
@@ -26,6 +28,9 @@ public class DialogBoxController : IComponent
 
     private bool hover = false;
 
+    private TextSystem textSystem;
+    private string[] swearList = ["Crap", "I'll have to try again.", "Stupid Machine", "I'd better get overtime for this.", "I hate this system."];
+
     public DialogBoxController(GameObject gameObject)
     {
         GameObject = gameObject;
@@ -33,6 +38,17 @@ public class DialogBoxController : IComponent
 
     public void Initialize()
     {
+        if (game.GameState == GameState.DIALOGBOXINVALID)
+        {
+            textSystem = new TextSystem(TextObject.CreateLinesOfText(swearList[new Random().Next(0, swearList.Length)], 15, 
+                new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+        }
+        
+        if (game.GameState == GameState.DIALOGBOXFIXED)
+        {
+            textSystem = new TextSystem(TextObject.CreateLinesOfText("Finally, I can go home.", 15, 
+                new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+        }
     }
 
     public void PreUpdate(GameTime gameTime)
@@ -41,6 +57,8 @@ public class DialogBoxController : IComponent
 
     public void Update(GameTime gameTime)
     {
+        if (textSystem != null) textSystem.Update(gameTime);
+
         hover = false;
         MouseState mouseState = Mouse.GetState();
         Vector2 mousePosition = new Vector2((mouseState.X - ScreenScaling.topLeft.X) / ScreenScaling.scale, 
@@ -79,5 +97,7 @@ public class DialogBoxController : IComponent
         else Button.Texture = okHover;
 
         Button.Draw();
+
+        if (textSystem != null) textSystem.Draw(game.spriteBatch);
     }
 }
