@@ -76,7 +76,7 @@ ROOT\SYS\LANG\EN.LP
 
     public FileSystemState CheckFileSystem()
     {
-        Console.WriteLine("this got called");
+        //Console.WriteLine("this got called");
         bool notCorrect = false;
         bool notInitial = false;
 

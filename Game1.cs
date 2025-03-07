@@ -41,7 +41,7 @@ public class Game1 : Game
         // Adds an artificial pause so what happened can be processed.
         //System.Threading.Thread.Sleep(2000);
 
-        Console.WriteLine(FileSystemUtils.GenerateState("ROOT"));
+        //Console.WriteLine(FileSystemUtils.GenerateState("ROOT"));
 
         // TODO: Add your initialization logic here
         graphics.IsFullScreen = true;
@@ -111,7 +111,7 @@ public class Game1 : Game
     {
         if (gameTime.TotalGameTime.TotalSeconds <= 2) return;
 
-        if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)))// && GameState != GameState.BLUESCREEN)
+        if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) && GameState != GameState.BLUESCREEN)
             Exit();
 
         KeyboardExtended.PreUpdate();
@@ -223,7 +223,7 @@ public class Game1 : Game
     // Put the game in the correct state upon startup.
     private void GameStateCheck()
     {
-        Console.WriteLine(FileSystemUtils.InitialState);
+        //Console.WriteLine(FileSystemUtils.InitialState);
 
         FileSystemState fileSystemState = FileSystemUtils.CheckFileSystem();
         SaveData = new SaveData();
@@ -262,7 +262,7 @@ public class Game1 : Game
         SaveData.LastGameState = (int)GameState;
         SaveData.WriteSaveData();
 
-        Console.WriteLine(SaveData.GameBootCount);
+        //Console.WriteLine(SaveData.GameBootCount);
         Process process = System.Diagnostics.Process.GetCurrentProcess();
         ProcessStartInfo startInfo = new ProcessStartInfo(process.MainModule.FileName);
         startInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();
