@@ -1,5 +1,6 @@
 using Engine.Core;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -29,6 +30,8 @@ public class DialogBoxController : IComponent
     private bool hover = false;
 
     private TextSystem textSystem;
+    public SoundEffect thoughtBeep;
+    
     private string[] swearList = ["Crap", "I'll have to try again.", "Stupid Machine", "I'd better get overtime for this.", "I hate this system."];
 
     public DialogBoxController(GameObject gameObject)
@@ -42,12 +45,14 @@ public class DialogBoxController : IComponent
         {
             textSystem = new TextSystem(TextObject.CreateLinesOfText(swearList[new Random().Next(0, swearList.Length)], 15, 
                 new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+            textSystem.textBeep = thoughtBeep;
         }
         
         if (game.GameState == GameState.DIALOGBOXFIXED)
         {
             textSystem = new TextSystem(TextObject.CreateLinesOfText("Finally, I can go home.", 15, 
                 new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+            textSystem.textBeep = thoughtBeep;
         }
     }
 
