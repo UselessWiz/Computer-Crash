@@ -1,5 +1,6 @@
 using Engine.Core;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -21,6 +22,7 @@ public class BluescreenController : IComponent
     public Game1 game;
 
     private TextSystem textSystem;
+    public SoundEffect thoughtBeep;
     private string[] swearList = ["Crap", "Shit", "No No No", "Stupid Machine"];
 
     public double startTime = 0;
@@ -36,10 +38,12 @@ public class BluescreenController : IComponent
         {
             textSystem = new TextSystem(TextObject.CreateLinesOfText("Not again...", 10, 
                 new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+            textSystem.textBeep = thoughtBeep;
         }
         else {
             textSystem = new TextSystem(TextObject.CreateLinesOfText(swearList[new Random().Next(0, swearList.Length)], 10, 
                 new Vector2(400, 300), 4, Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero, 0.1f, new Color(0xff8800cc), new SpriteFont[] {monogram}));
+            textSystem.textBeep = thoughtBeep;
         }
     }
 

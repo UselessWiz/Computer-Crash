@@ -79,6 +79,7 @@ public class Game1 : Game
         BluescreenController bluescreenController = new BluescreenController(Bluescreen);
         bluescreenController.monogram = Content.Load<SpriteFont>("Monogram");
         bluescreenController.game = this;
+        bluescreenController.thoughtBeep = Content.Load<SoundEffect>("Audio/Thought-Beep");
         bluescreenController.Initialize();
         Bluescreen.AttachComponent(bluescreenController);
 
@@ -93,6 +94,7 @@ public class Game1 : Game
         dialogBoxController.ok = Content.Load<Texture2D>("Sprites/OK-Hover");
         dialogBoxController.okHover = dialogBoxController.Button.Texture;
         dialogBoxController.game = this;
+        dialogBoxController.thoughtBeep = Content.Load<SoundEffect>("Audio/Thought-Beep");
         dialogBoxController.Initialize();
         DialogBox.AttachComponent(dialogBoxController);
 
