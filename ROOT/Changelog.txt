@@ -1,10 +1,12 @@
 Doors OS Changelog
 ------------------
 
-Date: 07/03/2025
+Date: 10/03/2025
 Version: 0.2.0
 Changes:
-    - [MAJOR CHANGE] We have restructured the ROOT\SYS folder, adding further organizational subdirectories to begin controlling the mess of system files previously contained within the ROOT\SYS directory. Note that some systems may have issues following through with this change, with the most common symptom; if this is the case for your system, try your best to assemble the ROOT\SYS folder correctly on your own (there will be no fix for the next few days as our team has taken the weekend off). All files have error handling build in and there is no risk to any system (particularly regarding executable files; these will run in user mode, and cannot make changes to any systems). [Bob - Intern]
+    - [MAJOR CHANGE] We have restructured the ROOT\SYS folder, adding further organizational subdirectories to begin controlling the mess of system files previously contained within the ROOT\SYS directory. Note that some systems may have issues following through with this change, with the most common symptom being system crashes; if this is the case for your system, try your best to assemble the ROOT\SYS folder correctly on your own (there will be no fix for the next few days as our team has taken the weekend off). 
+    
+    All files have error handling build in and there is no risk to any system (particularly regarding executable files; these will run in user mode, and cannot make changes to any systems). There should be no loose files in the SYS folder after reorganization, and the contents of the files won't need altering with these changes. [Bob - Intern]
 
     - Added support for a number of new, rarely used languages, including Esperanto, Xhosa, Igbo and Serbian. [James - Locale Team]
 
